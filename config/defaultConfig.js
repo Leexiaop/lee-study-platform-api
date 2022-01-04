@@ -1,8 +1,8 @@
 const config = {
     user: 'root',
     password: 'lee13691388204',
-    database: 'test',
-    host: 'localhost',
+    database: 'lee',
+    host: '127.0.0.1',
     port: 3306
 }
 
