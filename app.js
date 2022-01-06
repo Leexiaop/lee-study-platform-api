@@ -3,9 +3,11 @@ const app = new Koa()
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
-const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const cors = require('koa2-cors')
+const koaBody = require('koa-body')
+const path = require('path')
+const koaStatic = require('koa-static')
 const router = require('./routes/index')
 
 // error handler
@@ -15,13 +17,19 @@ onerror(app)
 app.use(cors())
 
 // middlewares
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
+
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
-
+app.use(koaStatic(path.join(__dirname, 'public')))
+app.use(koaBody(
+  	{
+		multipart: true,
+		formidable: {
+			uploadDir: path.join(__dirname, 'public/uploads'),
+			keepExtensions: true
+		}
+	}
+))
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
@@ -41,7 +49,5 @@ app.use(router.routes(), router.allowedMethods())
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
-
-
 
 module.exports = app
