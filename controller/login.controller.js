@@ -1,6 +1,6 @@
 const jsonwebtoken = require('jsonwebtoken')
 const mysql = require('../config/mysqlConfig')
-const SECRET = 'leelxp'
+const secret = require('../config/secret.json')
 
 module.exports = {
     login: async (ctx) => {
@@ -29,7 +29,7 @@ module.exports = {
                 name: userInfo.name,
                 idd: userInfo.id
             },
-            SECRET,
+            secret.secret,
             {
                 expiresIn: '1h'
             }
