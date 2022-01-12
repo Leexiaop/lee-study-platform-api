@@ -1,4 +1,7 @@
 const mysql = require('../config/mysqlConfig')
+const moment = require('moment')
+
+const now = moment().format('YYYY-MM-DD HH:mm:ss')
 
 module.exports = {
     get: async (ctx, next) => {
@@ -12,7 +15,7 @@ module.exports = {
     },
     post: async (ctx, next) => {
         const param = ctx.request.body
-        const sql = `INSERT INTO study_module (name, src, tip) VALUES ('${param.name}', '${param.src}', '${param.tip}');`
+        const sql = `INSERT INTO study_module (name, src, tip, create_time, update_time) VALUES ('${param.name}', '${param.src}', '${param.tip}', '${now}', '${now}');`
         const data = await mysql.mysqlQuery(sql)
         ctx.body = {
             code: 0,
@@ -40,7 +43,7 @@ module.exports = {
     },
     put: async (ctx, next) => {
         const param = ctx.request.body
-        const sql = `UPDATE study_module SET name='${param.name}', src='${param.src}', tip='${param.tip}' WHERE id=${param.id};`
+        const sql = `UPDATE study_module SET name='${param.name}', src='${param.src}', tip='${param.tip}', update_time='${now}' WHERE id=${param.id};`
         await mysql.mysqlQuery(sql)
         ctx.body = {
             code: 0,

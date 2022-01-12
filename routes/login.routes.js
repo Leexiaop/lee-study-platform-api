@@ -4,4 +4,3 @@ const { login } = require('../controller')
 router.post('/', (ctx, next) => login.login(ctx, next))
 
 module.exports = router
-
