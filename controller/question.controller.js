@@ -5,12 +5,20 @@ const now = moment().format('YYYY-MM-DD HH:mm:ss')
 
 module.exports = {
     get: async (ctx, next) => {
-        const sql = `select * from question;`
-        const query =  await mysql.mysqlQuery(sql)
+        const questionList =  await mysql.mysqlQuery(`select * from question;`)
+        const answerList = await mysql.mysqlQuery(`select * from answer;`)
+        questionList.forEach(question => {
+            question.answerList = []
+            answerList.forEach(answer => {
+                if (question.id === answer.questionId) {
+                    question.answerList.push(answer)
+                }
+            })
+        });
         ctx.body = {
             code: 0,
             msg: '请求成功',
-            data: query
+            data: questionList
         }
     },
     post: async (ctx, next) => {
