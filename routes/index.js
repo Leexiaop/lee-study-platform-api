@@ -2,8 +2,8 @@ const router = require('koa-router')()
 const login = require('./login.routes')
 const upload = require('./upload.routes')
 const studyModule = require('./study_module.routes')
-const question = require('./question.routes')
-const answer = require('./answer.routes')
+const question = require('./question/index.routes')
+const answer = require('./answer/index.routes')
 
 router.get('/', function (ctx, next) {
     ctx.body = '这是一个初始化的请求'

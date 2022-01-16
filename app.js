@@ -20,7 +20,7 @@ onerror(app)
 app.use(cors())
 
 // middlewares
-app.use(checkToken)
+// app.use(checkToken)
 // app.use(jwtKoa(secret).unless({
 // 	path: [/^\/login/]
 // }))

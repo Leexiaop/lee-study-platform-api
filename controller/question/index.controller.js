@@ -1,11 +1,16 @@
-const mysql = require('../config/mysqlConfig')
+const mysql = require('../../config/mysqlConfig')
 const moment = require('moment')
 
 const now = moment().format('YYYY-MM-DD HH:mm:ss')
 
 module.exports = {
     get: async (ctx, next) => {
-        const questionList =  await mysql.mysqlQuery(`select * from question;`)
+        const { moduleId } = ctx.query
+        let questionSql = `select * from question`
+        if (moduleId) {
+            questionSql += ` WHERE module='${moduleId}'`
+        }
+        const questionList =  await mysql.mysqlQuery(questionSql)
         const answerList = await mysql.mysqlQuery(`select * from answer;`)
         questionList.forEach(question => {
             question.answerList = []
@@ -38,6 +43,24 @@ module.exports = {
         ctx.body = {
             code: 0,
             msg: '更新成功',
+            data: true
+        }
+    },
+    delete: async (ctx) => {
+        const param = ctx.params
+        if (!param.id) {
+            ctx.body = {
+                code: 0,
+                msg: '删除失败',
+                data: false
+            }
+            return
+        }
+        const sql = `DELETE FROM question WHERE id=${param.id};`
+        await mysql.mysqlQuery(sql)
+        ctx.body = {
+            code: 0,
+            msg: '删除成功',
             data: true
         }
     }
