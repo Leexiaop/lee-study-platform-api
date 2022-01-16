@@ -8,8 +8,8 @@ const cors = require('koa2-cors')
 const koaBody = require('koa-body')
 const path = require('path')
 const koaStatic = require('koa-static')
-const jwtKoa = require('koa-jwt')
-const secret = require('./config/secret.json')
+// const jwtKoa = require('koa-jwt')
+// const secret = require('./config/secret.json')
 const checkToken = require('./middleware/check-token')
 const router = require('./routes/index')
 
@@ -20,7 +20,7 @@ onerror(app)
 app.use(cors())
 
 // middlewares
-// app.use(checkToken)
+app.use(checkToken)
 // app.use(jwtKoa(secret).unless({
 // 	path: [/^\/login/]
 // }))

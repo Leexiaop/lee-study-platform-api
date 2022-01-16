@@ -5,13 +5,19 @@ const now = moment().format('YYYY-MM-DD HH:mm:ss')
 
 module.exports = {
     get: async (ctx, next) => {
-        const { moduleId } = ctx.query
+        const { moduleId, current, size } = ctx.query
         let questionSql = `select * from question`
+        let tSql = `SELECT COUNT(*) AS total FROM question`
         if (moduleId) {
             questionSql += ` WHERE module='${moduleId}'`
+            tSql += ` WHERE module='${moduleId}'`
         }
+        if (current && size) {
+            questionSql += ` LIMIT ${(current - 1) * size},${size}`
+        }
+        const [total] = await mysql.mysqlQuery(tSql)
         const questionList =  await mysql.mysqlQuery(questionSql)
-        const answerList = await mysql.mysqlQuery(`select * from answer;`)
+        const answerList = await mysql.mysqlQuery(`select * from answer`)
         questionList.forEach(question => {
             question.answerList = []
             answerList.forEach(answer => {
@@ -23,7 +29,10 @@ module.exports = {
         ctx.body = {
             code: 0,
             msg: '请求成功',
-            data: questionList
+            data: {
+                list: questionList,
+                total: total.total
+            }
         }
     },
     post: async (ctx, next) => {

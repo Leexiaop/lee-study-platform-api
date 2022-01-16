@@ -1,5 +1,4 @@
 const online = require('koa-router')()
-// const online = require('./online.controller')
 const mysql = require('../../config/mysqlConfig')
 const moment = require('moment')
 
@@ -7,12 +6,29 @@ const now = moment().format('YYYY-MM-DD HH:mm:ss')
 
 module.exports = {
     get: async (ctx) => {
-        const sql = `select * from answer;`
+        const { moduleId, questionId, current, size } = ctx.query
+        let sql = `select * from answer`
+        let tSql = `SELECT COUNT(*) AS total FROM answer`
+        if (moduleId) {
+            sql += ` WHERE moduleId='${moduleId}'`
+            tSql += ` WHERE moduleId='${moduleId}'`
+        }
+        if (questionId) {
+            sql += ` AND questionId='${questionId}'`
+            tSql += ` AND questionId='${questionId}'`
+        }
+        if (current && size) {
+            sql += ` LIMIT ${(current - 1) * size},${size}`
+        }
+        const [total] = await mysql.mysqlQuery(tSql)
         const query =  await mysql.mysqlQuery(sql)
         ctx.body = {
             code: 0,
             msg: '请求成功',
-            data: query
+            data: {
+                list: query,
+                total: total.total
+            }
         }
     },
     post: async (ctx, next) => {
