@@ -17,7 +17,18 @@ module.exports = {
         }
         const [total] = await mysql.mysqlQuery(tSql)
         const questionList =  await mysql.mysqlQuery(questionSql)
-        const answerList = await mysql.mysqlQuery(`select * from answer`)
+        if (!questionList.length) {
+            ctx.body = {
+                code: 0,
+                msg: '请求成功',
+                data: {
+                    list: questionList,
+                    total: 0
+                }
+            }
+            return
+        }
+        const answerList = await mysql.mysqlQuery(`select * from answer WHERE id IN (${questionList.map(q => q.id).toString()})`)
         questionList.forEach(question => {
             question.answerList = []
             answerList.forEach(answer => {
@@ -37,7 +48,7 @@ module.exports = {
     },
     post: async (ctx, next) => {
         const param = ctx.request.body
-        const sql = `INSERT INTO question (module, question, create_time, update_time) VALUES ('${param.module}', '${param.question}', '${now}', '${now}');`
+        const sql = `INSERT INTO question (module, question, online, create_time, update_time) VALUES ('${param.module}', '${param.question}', '0', '${now}', '${now}');`
         const data = await mysql.mysqlQuery(sql)
         ctx.body = {
             code: 0,
