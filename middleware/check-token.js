@@ -1,44 +1,45 @@
-const jwt = require('jsonwebtoken')
-const secret = require('../config/secret.json')
-const util = require('util')
-const verify = util.promisify(jwt.verify)
+const jwt = require('jsonwebtoken');
+const util = require('util');
+const secret = require('../config/secret.json');
 
-const whiteList = [
-    '/login'
-]
-const reg = /^\/uploads/g
+const verify = util.promisify(jwt.verify);
+
+const whiteList = ['/login'];
+const reg = /^\/uploads/g;
 
 module.exports = async (ctx, next) => {
+    const token = ctx.header.token;
     if (whiteList.find(item => item === ctx.url) || reg.test(ctx.url)) {
-        await next()
-        return
+        await next();
+        return;
     }
-    const token = ctx.header.token
+    // const token = ctx.header.token
+    // console.log(token)
     try {
         if (token) {
-            const payload = await verify(token.split(' ')[0], secret.secret)
+            const payload = await verify(token.split(' ')[0], secret.secret);
             if (payload) {
-                await next()
+                await next();
             } else {
                 ctx.body = {
                     code: 10001,
                     msg: '请重新登录',
                     data: {}
-                } 
+                };
             }
         } else {
             ctx.body = {
                 code: 10001,
                 msg: '请重新登录',
                 data: {}
-            }
+            };
         }
     } catch (err) {
         ctx.body = {
             code: 10001,
             msg: '请重新登录',
             data: {}
-        }
+        };
     }
     // return async function (ctx, next) {
     //     try {
@@ -72,4 +73,4 @@ module.exports = async (ctx, next) => {
     //         }
     //     }
     // }
-}
+};

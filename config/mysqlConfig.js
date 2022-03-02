@@ -1,28 +1,28 @@
-const mysql = require('mysql')
-const config = require('./defaultConfig')
+const mysql = require('mysql');
+const config = require('./defaultConfig');
 
-var pool  = mysql.createPool({
-  host     : config.host,
-  user     : config.user,
-  password : config.password,
-  database : config.database
-})
+let pool = mysql.createPool({
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.database
+});
 
 exports.mysqlQuery = (sql, values) => {
     return new Promise((resolve, reject) => {
-        pool.getConnection( (err, connection) => {
+        pool.getConnection((err, connection) => {
             if (err) {
-                reject(err)
+                reject(err);
             } else {
-                connection.query(sql, values, ( err, rows) => {
+                connection.query(sql, values, (err, rows) => {
                     if (err) {
-                        reject(err)
+                        reject(err);
                     } else {
-                        resolve(rows)
+                        resolve(rows);
                     }
-                    connection.release()
-                })
+                    connection.release();
+                });
             }
-        })
-    })
-}
+        });
+    });
+};

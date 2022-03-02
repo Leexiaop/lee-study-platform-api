@@ -4,6 +4,6 @@ const config = {
     database: 'lee',
     host: '127.0.0.1',
     port: 3306
-}
+};
 
-module.exports = config
+module.exports = config;
