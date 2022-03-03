@@ -1,7 +1,7 @@
 const router = require('koa-router')();
 const login = require('./login.routes');
 const upload = require('./upload.routes');
-const modules = require('./modules.routes');
+const modules = require('./modules');
 const question = require('./question/index.routes');
 const answer = require('./answer/index.routes');
 

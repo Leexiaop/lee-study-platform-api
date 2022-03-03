@@ -8,13 +8,11 @@ const whiteList = ['/login'];
 const reg = /^\/uploads/g;
 
 module.exports = async (ctx, next) => {
-    const token = ctx.header.token;
     if (whiteList.find(item => item === ctx.url) || reg.test(ctx.url)) {
         await next();
         return;
     }
-    // const token = ctx.header.token
-    // console.log(token)
+    const token = ctx.header.token;
     try {
         if (token) {
             const payload = await verify(token.split(' ')[0], secret.secret);
