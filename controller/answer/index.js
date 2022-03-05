@@ -1,9 +1,9 @@
-const ModulesModel = require('../model/modules');
+const AnswerModel = require('../../model/answer');
 
 module.exports = {
     get: async (ctx) => {
         try {
-            const {count, rows} = await ModulesModel.onModulesQuery(ctx.query);
+            const {count, rows} = await AnswerModel.onAnswerQuery(ctx.query);
             ctx.body = {
                 code: 10000,
                 msg: 'success',
@@ -21,13 +21,12 @@ module.exports = {
         }
     },
     post: async (ctx) => {
-        const param = ctx.request.body;
         try {
-            const data = await ModulesModel.onModulesAdd(param);
+            const data = await AnswerModel.onAnswerAdd(ctx.request.body);
             ctx.body = {
                 code: 10000,
-                msg: 'success',
-                data: data
+                msg: 'error',
+                data
             };
         } catch (err) {
             ctx.body = {
@@ -40,7 +39,7 @@ module.exports = {
     delete: async (ctx) => {
         const {id} = ctx.params;
         try {
-            await ModulesModel.onModulesDelete(id);
+            await AnswerModel.onAnswerDelete(id);
             ctx.body = {
                 code: 10000,
                 msg: 'success',
@@ -57,7 +56,7 @@ module.exports = {
     put: async (ctx) => {
         const param = ctx.request.body;
         try {
-            const data = await ModulesModel.onModulesUpdate(param);
+            const data = await AnswerModel.onAnswerUpdate(param);
             ctx.body = {
                 code: 10000,
                 msg: 'success',

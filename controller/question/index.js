@@ -1,12 +1,14 @@
-const ModulesModel = require('../model/modules');
+const QuestionModel = require('../../model/question');
+// const AnswerModel = require('../../model/answer');
 
 module.exports = {
     get: async (ctx) => {
         try {
-            const {count, rows} = await ModulesModel.onModulesQuery(ctx.query);
+            const {count, rows} = await QuestionModel.onQuestionQuery(ctx.query);
+            // const answer = await AnswerModel.onAnswerQuery();
             ctx.body = {
                 code: 10000,
-                msg: 'success',
+                msg: 'error',
                 data: {
                     list: rows,
                     total: count
@@ -21,13 +23,12 @@ module.exports = {
         }
     },
     post: async (ctx) => {
-        const param = ctx.request.body;
         try {
-            const data = await ModulesModel.onModulesAdd(param);
+            const data = await QuestionModel.onQuestionAdd(ctx.request.body);
             ctx.body = {
                 code: 10000,
-                msg: 'success',
-                data: data
+                msg: 'error',
+                data
             };
         } catch (err) {
             ctx.body = {
@@ -40,7 +41,7 @@ module.exports = {
     delete: async (ctx) => {
         const {id} = ctx.params;
         try {
-            await ModulesModel.onModulesDelete(id);
+            await QuestionModel.onQuestionDelete(id);
             ctx.body = {
                 code: 10000,
                 msg: 'success',
@@ -57,7 +58,7 @@ module.exports = {
     put: async (ctx) => {
         const param = ctx.request.body;
         try {
-            const data = await ModulesModel.onModulesUpdate(param);
+            const data = await QuestionModel.onQuestionUpdate(param);
             ctx.body = {
                 code: 10000,
                 msg: 'success',
