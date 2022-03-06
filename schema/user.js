@@ -8,24 +8,37 @@ module.exports = (sequelize, DataTypes) => {
         },
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
-            field: 'name'
+            allowNull: false
         },
         password: {
             type: DataTypes.INTEGER,
-            allowNull: true,
-            field: 'password'
+            allowNull: true
+        },
+        type: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        role: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        email: {
+            type: DataTypes.INTEGER,
+            allowNull: true
         },
         phone: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            field: 'phone'
+            allowNull: false
+        },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }, {
         freezeTableName: true,
         tableName: 'user',
         timestamps: true,
-        createdAt: false,
-        updatedAt: false
+        createdAt: 'create_time',
+        updatedAt: 'update_time'
     });
 };

@@ -68,6 +68,15 @@ class AnswerModel {
             }
         });
     }
+
+    static async onAnswerListQuery(questionId) {
+        return await Answer.findAll({
+            raw: true,
+            where: {
+                questionId
+            }
+        });
+    }
 }
 
 module.exports = AnswerModel;

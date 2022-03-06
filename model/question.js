@@ -9,6 +9,7 @@ class QuestionModel {
     static async onQuestionQuery(query) {
         const {moduleId, current, size} = query;
         let param = {
+            raw: true,
             order: [['create_time', 'DESC']],
             where: {}
         };

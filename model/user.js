@@ -5,7 +5,8 @@ const User = require('../schema/user')(mysql.sequelize, DataTypes);
 class UserModel {
     static async onUserQuery(query) {
         const {username} = query;
-        await User.findOne({
+        return await User.findOne({
+            raw: true,
             where: {
                 name: username
             }

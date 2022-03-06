@@ -25,7 +25,7 @@ module.exports = {
             const data = await AnswerModel.onAnswerAdd(ctx.request.body);
             ctx.body = {
                 code: 10000,
-                msg: 'error',
+                msg: 'success',
                 data
             };
         } catch (err) {

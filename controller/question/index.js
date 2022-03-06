@@ -1,14 +1,23 @@
 const QuestionModel = require('../../model/question');
-// const AnswerModel = require('../../model/answer');
+const AnswerModel = require('../../model/answer');
 
 module.exports = {
     get: async (ctx) => {
         try {
             const {count, rows} = await QuestionModel.onQuestionQuery(ctx.query);
-            // const answer = await AnswerModel.onAnswerQuery();
+            if (rows.length) {
+                let questionIds = rows.map(row => row.id);
+                const data = await AnswerModel.onAnswerListQuery(questionIds);
+                rows.forEach(row => {
+                    row.answerList = [];
+                    if (data.find(item => item.questionId === row.id)) {
+                        row.answerList.push(data.find(item => item.questionId === row.id));
+                    }
+                });
+            }
             ctx.body = {
                 code: 10000,
-                msg: 'error',
+                msg: 'success',
                 data: {
                     list: rows,
                     total: count
@@ -27,7 +36,7 @@ module.exports = {
             const data = await QuestionModel.onQuestionAdd(ctx.request.body);
             ctx.body = {
                 code: 10000,
-                msg: 'error',
+                msg: 'success',
                 data
             };
         } catch (err) {
