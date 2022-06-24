@@ -6,7 +6,8 @@ const question = require('./question');
 const answer = require('./answer');
 
 router.get('/', (ctx, next) => {
-    ctx.body = '这是一个初始化的请求';
+    console.log(ctx.query);
+    ctx.body = '这是一个请求';
 });
 
 router.use('/login', login.routes(), login.allowedMethods);
